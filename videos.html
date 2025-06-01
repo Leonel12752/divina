@@ -1,0 +1,67 @@
+import requests
+from bs4 import BeautifulSoup
+
+# URL del canal de Xvideos
+channel_url = "https://www.xvideos.com/channels/divinamaruuu"
+
+# Headers para simular un navegador real
+headers = {
+    "User-Agent": "Mozilla/5.0"
+}
+
+# Obtener el HTML del canal
+response = requests.get(channel_url, headers=headers)
+soup = BeautifulSoup(response.text, "html.parser")
+
+# Extraer enlaces de videos
+video_links = []
+for a in soup.select("div.thumb a[href^='/video']"):
+    href = a.get("href")
+    if href and href.startswith("/video") and href not in video_links:
+        video_links.append("https://www.xvideos.com" + href)
+
+# Extraer ID y generar iframes
+iframes = []
+for link in video_links:
+    try:
+        video_id = link.split("/")[-1]
+        iframe = f'<div class="video-container"><iframe src="https://www.xvideos.com/embedframe/{video_id}" frameborder="0" width="640" height="360" scrolling="no" allowfullscreen></iframe></div>'
+        iframes.append(iframe)
+    except Exception:
+        continue
+
+# Generar HTML
+html_output = """
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Videos del canal divinamaruuu</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .video-container {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      max-width: 640px;
+      height: 360px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Videos del canal: divinamaruuu</h1>
+""" + "\n".join(iframes) + "\n</body>\n</html>"
+
+# Guardar archivo HTML
+with open("videos_divinamaruuu.html", "w", encoding="utf-8") as f:
+    f.write(html_output)
+
+print("Archivo 'videos_divinamaruuu.html' generado con éxito.")

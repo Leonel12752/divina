@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbie's World</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Parisienne&family=Satisfy&display=swap" rel="stylesheet">
+    <style>
+        /* Fuente personalizada para "Barbie" */
+        .font-barbie {
+            font-family: 'Satisfy', cursive; /* Estilo similar al de Barbie */
+            text-shadow: 2px 2px 0px #FF80AB, /* Sombra rosa más clara para contorno */
+                         4px 4px 0px rgba(0,0,0,0.15), /* Sombra oscura sutil para profundidad */
+                         2px 2px 10px rgba(255, 255, 255, 0.5); /* Brillo blanco */
+            color: white;
+        }
+        .font-parisienne {
+            font-family: 'Parisienne', cursive;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Evitar scroll horizontal */
+            scroll-behavior: smooth; /* Para el scroll de los links del menú */
+        }
+
+        /* Colores de fondo del diseño */
+        .bg-barbie-pink-light {
+            background-color: #FCE4EC; /* Rosa claro para fondo general */
+        }
+        .bg-barbie-pink-primary {
+            background-color: #F8BBD0; /* Rosa principal para slider/sobre mí */
+        }
+        .bg-barbie-pink-medium {
+            background-color: #F06292; /* Rosa más saturado */
+        }
+        .bg-barbie-pink-dark {
+            background-color: #E91E63; /* Rosa oscuro para sección VIP */
+        }
+        .text-barbie-hotpink {
+            color: #FF4081; /* Rosa fuerte para acentos */
+        }
+
+        /* Estilo de botones */
+        .btn-barbie {
+            background: linear-gradient(90deg, #FF80AB 0%, #FF4081 100%);
+            color: white;
+            border: 2px solid #fff;
+            border-radius: 9999px; /* Forma de píldora */
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 18px 0 #FF80AB55, 0 0 0 4px #fff2 inset;
+            transition: all 0.3s cubic-bezier(.4,0,.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-barbie:hover {
+            background: linear-gradient(90deg, #F50057 0%, #FF80AB 100%);
+            box-shadow: 0 8px 32px 0 #FF408199, 0 0 0 4px #fff6 inset;
+            transform: translateY(-2px) scale(1.04) rotate(-2deg);
+        }
+        .btn-barbie::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s cubic-bezier(.4,0,.2,1);
+        }
+        .btn-barbie:hover::before {
+            left: 100%;
+        }
+
+
+        .btn-barbie-outline {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 9999px; /* Forma de píldora */
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Efecto de brillo */
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-barbie-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 10px #FF4081; /* Brillo rosa adicional */
+            transform: scale(1.05); 
+        }
+        .btn-barbie-outline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s cubic-bezier(.4,0,.2,1);
+        }
+        .btn-barbie-outline:hover::before {
+            left: 100%;
+        }
+
+        /* Efecto Sparkle para las secciones */
+        .sparkle {
+            position: relative; /* Necesario para los pseudo-elementos */
+        }
+        .sparkle::before, .sparkle::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Para que no interfiera con los clics */
+            z-index: 0; /* Detrás del contenido, ajustado a 0 para que no se oculte detrás del fondo del body */
+        }
+        .sparkle::before { /* Capa de brillo sutil */
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            animation: subtleSparkle 15s infinite ease-in-out;
+        }
+        @keyframes subtleSparkle {
+            0%, 100% { opacity: 0; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        /* Opcional: Pequeñas partículas brillantes para .sparkle */
+        .sparkle-particles::after { /* Partículas (usar con moderación) */
+            background-image:
+                radial-gradient(circle, #FFF0F5 1px, transparent 1px),
+                radial-gradient(circle, #FFC0CB 1px, transparent 1px);
+            background-size: 30px 30px, 50px 50px;
+            background-position: 0 0, 25px 25px;
+            opacity: 0.3;
+            animation: moveSparkles 20s linear infinite;
+            z-index: 0; /* Asegurar que esté detrás del contenido pero sobre el fondo de la sección */
+        }
+        @keyframes moveSparkles {
+            from { background-position: 0 0, 25px 25px; }
+            to { background-position: 100px 100px, 125px 125px; }
+        }
+        
+        /* Corazones flotantes adicionales */
+        .heart-bg::before, .heart-bg::after, .heart-bg .extra-heart, .heart-bg .extra-heart-2, .heart-bg .extra-heart-3,
+        .heart-bg .extra-heart-4, .heart-bg .extra-heart-5, .heart-bg .extra-heart-6, .heart-bg .extra-heart-7,
+        .heart-bg .extra-heart-8, .heart-bg .extra-heart-9 {
+            content: '💖';
+            position: absolute;
+            opacity: 0.6; 
+            font-size: 2.5rem;
+            z-index: 0; /* Detrás del contenido principal de la sección pero sobre su fondo */
+            text-shadow: 0 0 5px rgba(255,255,255,0.5); 
+        }
+        .heart-bg::before { top: 20%; right: 10%; animation: heartFloat 8s infinite ease-in-out; }
+        .heart-bg::after { bottom: 25%; left: 15%; animation: heartFloat 8s infinite ease-in-out 1s; }
+        .heart-bg .extra-heart { top: 50%; left: 40%; animation: heartFloatExtra 10s infinite ease-in-out 2s; }
+        .heart-bg .extra-heart-2 { top: 30%; left: 70%; animation: heartFloatExtra 12s infinite ease-in-out 3s; }
+        .heart-bg .extra-heart-3 { bottom: 10%; right: 20%; animation: heartFloatExtra 14s infinite ease-in-out 4s; }
+        .heart-bg .extra-heart-4 { top: 40%; left: 20%; animation: heartFloatExtra 10s infinite ease-in-out; }
+        .heart-bg .extra-heart-5 { top: 60%; right: 30%; animation: heartFloatExtra 12s infinite ease-in-out; }
+        .heart-bg .extra-heart-6 { bottom: 15%; left: 50%; animation: heartFloatExtra 14s infinite ease-in-out; }
+        .heart-bg .extra-heart-7 { top: 10%; right: 40%; animation: heartFloatExtra 16s infinite ease-in-out; }
+        .heart-bg .extra-heart-8 { bottom: 5%; left: 10%; animation: heartFloatExtra 18s infinite ease-in-out; }
+        .heart-bg .extra-heart-9 { top: 70%; right: 60%; animation: heartFloatExtra 20s infinite ease-in-out; }
+
+        /* Animación adicional para corazones */
+        @keyframes sparkleAnim1 {
+            0%, 100% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        @keyframes sparkleAnim2 {
+            0%, 100% { transform: scale(0.7); opacity: 0.4; }
+            50% { transform: scale(1.1); opacity: 0.9; }
+        }
+        @keyframes heartFloat {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+            50% { transform: translateY(-20px) scale(1.15) rotate(5deg); } 
+        }
+        @keyframes heartFloatExtra {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+            50% { transform: translateY(-25px) scale(1.25) rotate(-5deg); } 
+        }
+
+        /* Estilos específicos de las secciones */
+        .hero-section {
+            background-color: #F472B6; 
+            position: relative;
+            overflow: hidden; 
+        }
+        .about-section {
+            background-color: #F472B6; 
+            position: relative;
+            overflow: hidden;
+        }
+        .vip-section {
+            background-color: #EC4899; 
+            position: relative;
+            overflow: hidden;
+        }
+        .vip-card {
+            background: linear-gradient(135deg, #F8BBD0, #F06292); /* Fondo degradado */
+            border-radius: 1.5rem; /* Más redondeado */
+            padding: 2rem; /* Más padding */
+            transition: transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.4s cubic-bezier(.4,0,.2,1);
+            color: white; /* Asegurar texto blanco */
+            box-shadow: 0 8px 20px rgba(233, 30, 99, 0.3), /* Sombra rosa */
+                        inset 0 0 15px rgba(255,255,255,0.2); /* Brillo interior sutil */
+            border: 1px solid rgba(255,255,255,0.3); /* Borde blanco semitransparente */
+            position: relative; /* Para que los elementos internos se posicionen correctamente */
+            z-index: 1; /* Para que esté sobre los efectos .sparkle de la sección */
+        }
+        .vip-card:hover {
+            transform: translateY(-10px) scale(1.03); /* Efecto hover más pronunciado */
+            box-shadow: 0 15px 30px rgba(233, 30, 99, 0.5),
+                        inset 0 0 20px rgba(255,255,255,0.3);
+        }
+        .vip-card svg { 
+            stroke: white;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.7));
+        }
+
+        .featured-section {
+            background-color: #F472B6; 
+            position: relative;
+            overflow: hidden;
+        }
+        .featured-card {
+            background-color: rgba(255,255,255,0.15); 
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            position: relative; /* Para z-index */
+            z-index: 1; /* Sobre efectos de sección */
+        }
+        .featured-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3), 0 0 15px #FF4081; /* Sombra y brillo rosa */
+            background-color: rgba(255,255,255,0.2);
+        }
+        .featured-card img {
+            transition: opacity 0.3s ease, transform 0.3s ease; 
+        }
+        .featured-card:hover img {
+            opacity: 0.7; 
+            transform: scale(1.1); 
+        }
+
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: white;
+            opacity: 0.9; 
+            text-shadow: 0 0 10px rgba(0,0,0,0.5); 
+            transition: transform 0.3s ease; 
+        }
+        .featured-card:hover .lock-icon {
+            transform: translate(-50%, -50%) scale(1.1); 
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block; 
+        }
+
+        /* Hero title "Maru" */
+        .hero-section h1.font-barbie {
+            color: white;
+            text-shadow: 
+                3px 3px 0px #FF80AB,
+                6px 6px 0px rgba(0,0,0,0.2),
+                0 0 25px rgba(255, 128, 171, 0.8); /* Brillo rosa más intenso */
+            animation: fadeInGlow 1.5s ease-out forwards; 
+        }
+        @keyframes fadeInGlow {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilo para imagen en Hero y About */
+        .hero-section img, .about-section img {
+            border: 6px solid white;
+            box-shadow: 0 0 25px rgba(255,255,255,0.7), 0 0 15px #FF4081AA; /* Brillo blanco y rosa */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; /* Para z-index */
+            z-index: 1; /* Sobre efectos de sección */
+        }
+        .hero-section img:hover, .about-section img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 35px rgba(255,255,255,0.9), 0 0 25px #FF4081;
+        }
+
+        /* Navbar */
+        nav.fixed {
+            box-shadow: 0 4px 20px rgba(233, 30, 99, 0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        /* Estilo para el logo en Navbar "DivinaMaruuu" */
+        /* Mantenemos el estilo inline del HTML para el color rosa específico del logo,
+           pero .font-barbie general se aplicará para el shadow si no se sobreescribe inline. */
+        
+        /* Efecto Barbie extra para el menú */
+        .barbie-menu-link {
+            position: relative;
+            color: #fff;
+            transition: color 0.3s, text-shadow 0.3s; 
+            padding-bottom: 4px;
+            font-weight: 700; 
+            letter-spacing: 0.02em; 
+        }
+        .barbie-menu-link::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -2px; 
+            transform: translateX(-50%) scaleX(0);
+            width: 100%; 
+            height: 3px;
+            background: linear-gradient(90deg, #FF80AB 0%, #FF4081 100%);
+            border-radius: 2px;
+            transition: transform 0.4s cubic-bezier(.25,.8,.25,1); 
+            box-shadow: 0 0 10px #FF80ABCC; 
+        }
+        .barbie-menu-link:hover,
+        .barbie-menu-link.active {
+            color: #FF4081; 
+            text-shadow: 0 0 10px #fff, 0 0 20px #FF80AB; 
+        }
+        .barbie-menu-link:hover::after,
+        .barbie-menu-link.active::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        /* Footer mejorado */
+        footer {
+            background: linear-gradient(45deg, #E91E63, #F06292); /* Degradado sutil */
+            padding: 2rem 1rem; /* Más padding */
+            border-top: 3px solid #FF80AB; /* Borde superior decorativo */
+            box-shadow: 0 -5px 15px rgba(233, 30, 99, 0.2); /* Sombra superior */
+            position: relative; /* Para z-index si fuera necesario */
+            z-index: 10; /* Asegurar que el footer esté sobre cualquier efecto de fondo */
+        }
+        footer p {
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        footer .font-parisienne { 
+            font-size: 0.9rem;
+            color: #FCE4EC; /* Un rosa más claro */
+        }
+
+        /* Asegurar que los elementos con contenido (texto, imágenes) estén sobre los efectos de fondo */
+        .container > div { /* Todos los divs directos dentro de .container */
+            position: relative;
+            z-index: 1;
+        }
+        /* Específicamente para textos y títulos que podrían quedar detrás de corazones/sparkles */
+        h1, h2, h3, p, a {
+            position: relative;
+            z-index: 1; /* Ponerlos por encima de los pseudo-elementos de fondo */
+        }
+        .btn-barbie, .btn-barbie-outline {
+            z-index: 2; /* Los botones deben estar claramente por encima */
+        }
+        /* Los íconos SVG dentro de .vip-card ya tienen buen manejo con z-index de la card */
+
+        /* Icono flecha hacia arriba estilo Barbie */
+        .icon-arrow-up {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 9999px;
+            box-shadow: 0 2px 12px #FF80AB55, 0 0 0 4px #fff2 inset;
+            stroke: #FF80AB;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+    </style>
+</head>
+<body class="bg-barbie-pink-light text-white">
+
+    <!-- Menú de navegación Barbie mejorado -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-barbie-pink-primary bg-opacity-90 shadow-lg" style="backdrop-filter: blur(8px);">
+        <div class="container mx-auto px-6 py-3 flex items-center justify-between">
+            <a href="#hero" class="font-barbie text-3xl md:text-4xl font-bold tracking-wider" style="color: #FF4081; text-shadow: 2px 2px 8px #fff6;">DivinaMaruuu</a>
+            <ul class="flex space-x-4 md:space-x-8 font-semibold text-lg">
+                <li>
+                    <a href="#hero" class="barbie-menu-link">Inicio</a>
+                </li>
+                <li>
+                    <a href="#about" class="barbie-menu-link">Sobre mí</a>
+                </li>
+                <li>
+                    <a href="#vip" class="barbie-menu-link">VIP</a>
+                </li>
+                <li>
+                    <a href="#featured" class="barbie-menu-link">Destacado</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Espacio para que el menú no tape el contenido -->
+    <div class="h-20"></div>
+
+    <!-- Sección principal -->
+    <section id="hero" class="hero-section py-16 md:py-24 sparkle sparkle-particles heart-bg">
+        <!-- Corazones adicionales -->
+        <div class="extra-heart"></div>
+        <div class="extra-heart-2"></div>
+        <div class="extra-heart-3"></div>
+        <div class="extra-heart-4" style="top: 40%; left: 20%; animation: heartFloatExtra 10s infinite ease-in-out;"></div>
+        <div class="extra-heart-5" style="top: 60%; right: 30%; animation: heartFloatExtra 12s infinite ease-in-out;"></div>
+        <div class="extra-heart-6" style="bottom: 15%; left: 50%; animation: heartFloatExtra 14s infinite ease-in-out;"></div>
+        <div class="extra-heart-7" style="top: 10%; right: 40%; animation: heartFloatExtra 16s infinite ease-in-out;"></div>
+        <div class="extra-heart-8" style="bottom: 5%; left: 10%; animation: heartFloatExtra 18s infinite ease-in-out;"></div>
+        <div class="extra-heart-9" style="top: 70%; right: 60%; animation: heartFloatExtra 20s infinite ease-in-out;"></div>
+
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
+                    <h1 class="font-barbie text-6xl md:text-8xl font-bold mb-4">Maru</h1>
+                    <p class="text-xl md:text-2xl mb-8 leading-relaxed">
+                       ✨Pornstar of Argentinal 👙 🥰Anal sex Lover 💦bukkake specialist and lover of the taste of sperm ✨shoot in Europe for Premium Bukkake 📸 ✨Argentina 💋 💖 Maru 💖 ✨Actriz Porno Argentina 👙 ✨Amante del Sexo Anal 📸 💦  <br class="hidden md:inline">y contenido exclusivo
+                    </p>
+                    <a href="#featured" class="btn-barbie-outline inline-block">
+                        Ver contenido exclusivo
+                    </a>
+                </div>
+                <div class="md:w-1/2 flex justify-center md:justify-end">
+                    <img src="/images.png" alt="Imagen de Modelo Barbie" class="rounded-lg shadow-2xl w-3/4 md:w-auto max-h-[500px] object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección sobre mí -->
+    <section id="about" class="about-section py-16 md:py-20 sparkle">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/3 flex justify-center mb-8 md:mb-0">
+                    <img src="https://placehold.co/300x300/FFC0CB/FFFFFF?text=Barbie" alt="Imagen de Barbie - Sobre mí" class="rounded-full shadow-xl w-60 h-60 md:w-72 md:h-72 object-cover border-4 border-white">
+                </div>
+                <div class="md:w-2/3 md:pl-12 text-center md:text-left">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6" style="color: white;">Sobre mí</h2>
+                    <p class="text-lg md:text-xl mb-4 leading-relaxed">
+                        Soy Barbie, actriz, modelo y entusiasta de Barbie. Me encanta expresarme con glamour, diversión y un toque de fantasía.
+                    </p>
+                    <p class="text-lg md:text-xl font-semibold italic leading-relaxed">
+                        No soy solo una muñeca, soy un sueño hecho realidad.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Icono flecha hacia arriba estilo Barbie -->
+<svg 
+  xmlns="http://www.w3.org/2000/svg" 
+  class="icon-arrow-up" 
+  width="40" height="40" 
+  viewBox="0 0 24 24" 
+  fill="none" 
+  stroke="#FF80AB" 
+  stroke-width="2.5" 
+  stroke-linecap="round" 
+  stroke-linejoin="round"
+  style="background: white; border-radius: 9999px; box-shadow: 0 2px 12px #FF80AB55, 0 0 0 4px #fff2 inset;"
+>
+  <circle cx="12" cy="12" r="11" fill="#fff" opacity="0.8"/>
+  <path d="M12 17V7" />
+  <path d="M7 12l5-5 5 5" />
+</svg>
+    <!-- Sección contenido VIP -->
+    <section id="vip" class="vip-section py-16 md:py-20 sparkle">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12" style="color: white;">Contenido VIP</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <div class="vip-card text-center">
+                    <div class="text-5xl mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Fotos en HD</h3>
+                </div>
+                <div class="vip-card text-center">
+                    <div class="text-5xl mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Videos sensuales</h3>
+                </div>
+                <div class="vip-card text-center">
+                    <div class="text-5xl mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-2">Mensajes privados</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección contenido destacado -->
+    <section id="featured" class="featured-section py-16 md:py-20 sparkle heart-bg">
+        <!-- Corazones adicionales para esta sección también si se desea -->
+        <div class="extra-heart" style="top: 10%; left: 10%; animation: heartFloatExtra 15s infinite ease-in-out 1s;"></div>
+        <div class="extra-heart-2" style="top: 80%; right: 15%; animation: heartFloatExtra 13s infinite ease-in-out 2.5s;"></div>
+
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4" style="color: white;">Contenido destacado</h2>
+            <p class="text-xl md:text-2xl mb-10">Desbloquea lo que nadie más puede ver...</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-12">
+                <div class="featured-card aspect-square relative">
+                    <img src="https://placehold.co/300x300/E91E63/FFFFFF?text=Locked" alt="Contenido destacado bloqueado 1" class="w-full h-full object-cover opacity-50">
+                    <div class="lock-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="featured-card aspect-square relative">
+                     <img src="https://placehold.co/300x300/E91E63/FFFFFF?text=Locked" alt="Contenido destacado bloqueado 2" class="w-full h-full object-cover opacity-50">
+                     <div class="lock-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="featured-card aspect-square relative">
+                     <img src="https://placehold.co/300x300/E91E63/FFFFFF?text=Locked" alt="Contenido destacado bloqueado 3" class="w-full h-full object-cover opacity-50">
+                     <div class="lock-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="btn-barbie inline-block">
+                Regístrate para ver más
+            </a>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <footer class="bg-barbie-pink-dark text-center py-8">
+        <p class="text-sm">© 2024 Barbie's World. Todos los derechos reservados.</p>
+        <p class="text-xs mt-1 font-parisienne">Diseño inspirado en tus creaciones.</p>
+    </footer>
+
+    <!-- Efecto activo en el menú con JS -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = ['hero', 'about', 'vip', 'featured'];
+        const navLinks = document.querySelectorAll('.barbie-menu-link');
+        const navHeight = document.querySelector('nav').offsetHeight; // Altura del nav
+
+        function onScroll() {
+            let scrollPos = window.scrollY + navHeight + 20; // Añadir un offset para activar antes
+            let current = ''; // Iniciar vacío
+
+            // Encontrar la sección actual
+            for (let id of sections) {
+                const section = document.getElementById(id);
+                if (section) { // Verificar que la sección exista
+                    if (section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
+                        current = id;
+                        break; 
+                    }
+                }
+            }
+            
+            // Si no se encuentra ninguna sección (ej. al principio o al final de la página)
+            // intentar seleccionar la primera o la última visible
+            if (current === '') {
+                if (window.scrollY < document.getElementById(sections[0]).offsetTop) {
+                    current = sections[0];
+                } else { // Si está al final de la página, marcar la última sección
+                    const lastSection = document.getElementById(sections[sections.length - 1]);
+                    if (window.scrollY + window.innerHeight >= lastSection.offsetTop + lastSection.offsetHeight - 20) {
+                         current = sections[sections.length - 1];
+                    }
+                }
+            }
+
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', onScroll);
+        onScroll(); // Llamar una vez al cargar para estado inicial
+    });
+    </script>
+</body>
+</html>
